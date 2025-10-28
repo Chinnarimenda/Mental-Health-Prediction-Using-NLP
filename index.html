@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Disorder Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 150px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-clear {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-clear:hover {
+            background: #e0e0e0;
+        }
+
+        .result {
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 25px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result.low {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .result.moderate {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .result.high {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        .result h3 {
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .result.low h3 {
+            color: #155724;
+        }
+
+        .result.moderate h3 {
+            color: #856404;
+        }
+
+        .result.high h3 {
+            color: #721c24;
+        }
+
+        .score-display {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .message {
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #dc3545;
+            margin-top: 20px;
+        }
+
+        .resources {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .resources h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .resources ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resources li {
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .resources a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resources a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Mental Health Analyzer</h1>
+        <!-- <p class="subtitle">AI-powered text analysis for mental health indicators</p> -->
+
+        <div class="warning-box">
+            <strong>⚠️ Important Notice:</strong> This tool is for informational purposes only and should not replace professional medical advice, diagnosis, or treatment. If you're experiencing mental health concerns, please consult a qualified healthcare provider.
+        </div>
+
+        <form method="POST" action="/predict">
+            <div class="input-group">
+                <label for="text">Enter text to analyze:</label>
+                <textarea 
+                    id="text" 
+                    name="text"
+                    placeholder="Type or paste text here... (e.g., journal entries, social media posts, messages)"
+                    required
+                >{{ input_text if input_text else '' }}</textarea>
+            </div>
+
+            <div class="btn-container">
+                <button type="submit" class="btn-predict">
+                    Analyze Text
+                </button>
+                <button type="button" class="btn-clear" onclick="clearForm()">
+                    Clear
+                </button>
+            </div>
+        </form>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if risk_level %}
+        <div class="result ">
+            <h3>Risk Level: {{ risk_level }}</h3>
+            <div class="score-display">Prediction Score: {{ prediction_score }}%</div>
+            <div class="message">{{ message }}</div>
+        </div>
+        {% endif %}
+
+        <div class="resources">
+            <h4>Mental Health Resources</h4>
+            <ul>
+                <li>📞 <strong>National Suicide Prevention Lifeline:</strong> 988 (USA)</li>
+                <li>💬 <strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+                <li>🌐 <strong>SAMHSA National Helpline:</strong> 1-800-662-4357</li>
+                <li>🔗 <a href="https://www.mentalhealth.gov" target="_blank">MentalHealth.gov</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function clearForm() {
+            document.getElementById('text').value = '';
+            // Reload page to clear results
+            window.location.href = '/';
+        }
+
+        // Scroll to result if it exists
+        window.onload = function() {
+            const result = document.querySelector('.result');
+            if (result) {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    </script>
+</body>
+</html>
