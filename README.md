@@ -54,9 +54,39 @@ LABEL :- The target class (e.g., Normal, Distressed, Depression, Anxiety, etc.) 
    
     Visualized loss/accuracy curves and confusion matrix
 
+ #  🧠 Key Insights
 
+ LSTM effectively captures the emotional tone and context in user text.
+ 
+ Proper preprocessing (tokenization, padding, stemming) greatly improves performance.
+ 
+ Balanced data and word embeddings lead to higher model generalization.
 
+# 🛠️ Tech Stack
 
+ Language: Python
+
+ Libraries: TensorFlow, Keras, NumPy, Pandas, Scikit-learn, NLTK, Matplotlib
+ 
+ Tools: Jupyter Notebook / VS Code
+ 
+ Deployment (Optional): Streamlit or Flask web app for live text prediction
+
+# ✅ Results
+
+ Model accuracy: ~87–90% on test data
+ 
+ Robust detection of distress vs. normal text
+ 
+ Deployed successfully as an interactive web app (Streamlit)
+
+# 🚀 Future Improvements
+
+ Expand dataset for multi-class classification (depression, anxiety, stress, etc.)
+
+ Incorporate transformer-based models (BERT / RoBERTa) for better contextual understanding
+
+ Deploy to cloud (e.g., Hugging Face Spaces / Render / Streamlit Cloud)
 
 
 
